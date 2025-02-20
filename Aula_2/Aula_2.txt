@@ -1,0 +1,31 @@
+Colorshark - app para verificar e classificar as cores de um satellite
+colors a palete - site para paletas de cores
+tailwindcss - usar cores
+materials icons - fonte google para icones
+
+FIGMA -> local variables 
+
+é possivel com esta ferramenta setar variaveis de cores e utiliza-las em "fil" para setar uma cor corespondente a variavel.
+
+neste caso, utilizando o tailwindcss é possivel você usar custumization colors para pegar cores bases quer
+
+-> criar componente 
+
+criando um componente e o nomeando, é possivel reutilizar este componente em outros momentos, por assessment
+main content - crear variant, é possivel mudar o nome das variantes e ter varias variante sde um mesmo componente
+
+-> layout
+
+selecionando 2 ou mais componentes e add em layout, é possivel criar 1 so componente com auto layout
+
+-> apparence -> apply show icon (cria button para mostrar o icon)
+
+apply variable (dentro do item do componente)-> faz com que o item do componente se comporte como variavel
+
+
+
+-> atalhos: r -> retangulo
+f -> seta tamanhos de telas
+ctrl + g -> cria grupos
+alt shift -> copia um componente alinhando com o componente pai
+
