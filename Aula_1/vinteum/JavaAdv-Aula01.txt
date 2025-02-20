@@ -1,0 +1,32 @@
+4 princiapis do java:
+herança -> classe filho hjerda atributos e metodos do pai. filho é uma extensão do pai, iguais, mas que tenha mais que o pai (leitura: é um);
+encapsulamento -> Private/public/null -> proteger e definir os atributos e metodos da sua classe em "classes"
+
+public -> getter + setter -> verificar se o objeto em questão na vida real é necessario "ver" a informação ou/e mudar a informação, assim determinando de é private/ getter/setter
+construtor vai determinar os atributos necessarios para se ter o objeto. -> caso voce não tenha um construtor explicito, o java criara um construtor padão (sem parametros);
+
+tipos primitivos: int, boolean e etc (letra minuscula) -> porem settar valor inicial para melhor leitura
+atributos tipo referencia -> Classe (Letra maiuscula) -> String, Class e etc
+
+extancie referencias 
+
+ou
+
+apontar para null -> null pointer exception;
+
+funcionalidade/objetivo > regra
+
+sobrescrita -> quando uma classe de herança tem um metodo com mesmo modo, mas funcionalidade diferente -> @Override(anotaçaõ que informa o compilador que minha intenção é sobrescrever);
+sobrecarga -> varios metodos de uma mesma classe com mesmo modo, mas funcionalinalidades diferentes;
+
+
+
+lembrar: 
++= -> atribuição;
+metodo arrayList add -> adiciona a lista;
+java extention pack;
+crtl + . => barra de manipulação java dentro do vsc -> "space" seleciona;
+
+frase biblica: "Todo cod com else, pode ser escrito sem else e ficar melhor;" (quanto mais identação, mais seu codigo fica "hadoken", piora leitura)
+alt + shift = copia linha vscode para baixo;
+nome classe : pascoal case
