@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,72 +23,74 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.com.fiap.cash_up_api.Repository.CategoryRepository;
 import br.com.fiap.cash_up_api.model.Category;
 
 @RestController // component
+@RequestMapping("/categories")
 public class CategoryController {
 
     private final Logger log = LoggerFactory.getLogger(getClass());// declarando classe para log
 
-    private List<Category> repository = new ArrayList<>();
+    @Autowired //injeção de dependencias
+    private CategoryRepository repository;
 
     // listar todas as categorias
     // GET :8080/categories -> json
-    @GetMapping("/categories")
+    @GetMapping
     public List<Category> index(){ //mocky
         log.info("buscando todas categorias");
-        return repository;
+        return repository.findAll();
     }
 
     //cadastrar categoria
     //POST :8080/categories -> json
-    @PostMapping("/categories")
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     //retorna resposta adequada para o metodo
     //sempre retornar o recurso criado em metodos post
     //@ResponseStatus(code = HttpStatus.CREATED)
     //@requestbody verifica as mensagens passadas no body da requisisção
-    public ResponseEntity<Category> create(@RequestBody Category category){
+    public Category create(@RequestBody Category category){
         log.info("Cadastrando categoria: " + category.getName());
-        repository.add(category);
         //ResponseEntity da a possibilidade de configurar a resposta do metodo post 
-        return ResponseEntity.status(201).body(category);
+        return repository.save(category);
     }
 
     //retornar uma categoria
     // GET :8080/categories/id -> json
-    @GetMapping("/categories/{id}")
+    @GetMapping("/{id}")
     //Pathvariable indica que recebe informações do path (nome parametro = nome {})
-    public ResponseEntity<Category> get(@PathVariable Long id){
+    public Category get(@PathVariable Long id){
         //stream, ao ivez de um for, permite percorrer uma lista e pegar apenas o dado nescessario, o filter vai indicar qual o filtro nescessario para isso;
         //findfirst retorna um Optional -> indicação se uma variavel tem valor ou não
         log.info("buscando categorias");
-        return ResponseEntity.ok(getCategory(id)); //nunca chamar um metodo get de um optional se você não ter certeza de que tem alguma coisa dentro;
+        return getCategory(id); //nunca chamar um metodo get de um optional se você não ter certeza de que tem alguma coisa dentro;
         //ok == status(200).body()
     }
 
     // apagar categoria
     //escrever DelMap(ja acha aanotação)
-    @DeleteMapping("/categories/{id}")
-    public ResponseEntity<Object> destroy(@PathVariable Long id){
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void destroy(@PathVariable Long id){
         log.info("apagando categoria" + id);
-        repository.remove(getCategory(id));
-        return ResponseEntity.noContent().build();
+        repository.delete(getCategory(id));
     }
 
 
     // editar uma categorias
-    @PutMapping("/categories/{id}")
-    public ResponseEntity<Category> update(@PathVariable Long  id, @RequestBody Category category){
+    @PutMapping("/{id}")
+    public Category update(@PathVariable Long  id, @RequestBody Category category){
         log.info("alterando categoria: " + category.toString()); //Overide no toString(), permite que mudemos a resposta de categpria, que antes retornava um hash do objeto (escrevendo apenas category);
-        var categoryToUpdate = getCategory(id);
-        repository.remove(categoryToUpdate);
+        getCategory(id);
         category.setId(id);
-        repository.add(category);
-        return ResponseEntity.ok(category);
+        return repository.save(category);
     }
 
     private Category getCategory(Long id) {
-        return repository.stream().filter(c -> c.getId().equals(id)).findFirst().orElseThrow(
+        return repository.findById(id)
+        .orElseThrow(
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria não enocntrada")
         );//orElseThrow retorna uma excessao caso não encontre valor
     }
