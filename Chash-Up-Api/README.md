@@ -20,3 +20,8 @@
 - @CacheEvict(value = "categories", allEntries = true) -> quando novo item for criado, o cache é apagado e é criado um novo em uma nova requisição
 
 # Aula 08/04
+Usar passagem de parametros na busca: ?date=fdsfd&descricao=fdsfd
+@RequestParam ex:String description 
+
+@Slf4j -> cria log automatico
+log.info(template, var)
