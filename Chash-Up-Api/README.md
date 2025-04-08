@@ -18,3 +18,5 @@
 - @EnableCaching no app
 - @Cacheable("") no metodo que quer um cash
 - @CacheEvict(value = "categories", allEntries = true) -> quando novo item for criado, o cache é apagado e é criado um novo em uma nova requisição
+
+# Aula 08/04
