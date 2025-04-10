@@ -25,3 +25,8 @@ Usar passagem de parametros na busca: ?date=fdsfd&descricao=fdsfd
 
 @Slf4j -> cria log automatico
 log.info(template, var)
+
+# Aula 10/04
+
+- Montagem clausula sql para salvar categoria.
+- foi comentado as especificações de busca antiga e foi criado TransactionSpecifiction e add Jpa Specification npo repository;

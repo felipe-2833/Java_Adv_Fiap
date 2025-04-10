@@ -49,7 +49,6 @@ public class DatabaseSeeder {
             "Assinatura Netflix",
             "Internet",
             "Conta de Água",
-            "IPTU",
             "Cartão de crédito",
             "Manutenção do carro",
             "Academia",
