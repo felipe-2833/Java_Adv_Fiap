@@ -30,3 +30,7 @@ log.info(template, var)
 
 - Montagem clausula sql para salvar categoria.
 - foi comentado as especificações de busca antiga e foi criado TransactionSpecifiction e add Jpa Specification npo repository;
+
+# Aula 22/04
+
+- Criar controle de acesso. Autenticação(Verificar veracidade do usuario) + Autorização(Permissão do usuario para uma certa ação).
