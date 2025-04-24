@@ -34,3 +34,20 @@ log.info(template, var)
 # Aula 22/04
 
 - Criar controle de acesso. Autenticação(Verificar veracidade do usuario) + Autorização(Permissão do usuario para uma certa ação).
+
+# Aula 24/04
+
+- PEsoalizar detail service, retorna user detail que obtem detalhes do usuarios e o grantedAutorithes
+- classe que é userdetailService, necessita ter um metodo load:
+
+@Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'loadUserByUsername'");
+    }
+
+-Criar usuario valido na aplicação, AuthService, buscará usuario no banco e mostra-ra os detalhes do mesmo.
+
+- Para isso a clesse user precisa fazer um contrato com UserDetalils -> implementando seus metodos obrigatorios ("clausulas do contrato"), o getAuthorits e o getusername, que buscam uma lista de autorização do usuario e o username será no caso o email;
+
+* dica: implements == contrato

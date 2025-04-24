@@ -7,13 +7,17 @@ import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import br.com.fiap.cash_up_api.Repository.CategoryRepository;
 import br.com.fiap.cash_up_api.Repository.TransactionRepository;
+import br.com.fiap.cash_up_api.Repository.UserRepositoty;
 import br.com.fiap.cash_up_api.model.Category;
 import br.com.fiap.cash_up_api.model.Transaction;
 import br.com.fiap.cash_up_api.model.TransactionType;
+import br.com.fiap.cash_up_api.model.User;
+import br.com.fiap.cash_up_api.model.UserRole;
 import jakarta.annotation.PostConstruct;
 
 @Component
@@ -24,6 +28,12 @@ public class DatabaseSeeder {
 
     @Autowired
     private TransactionRepository transactionRepository;
+
+    @Autowired
+    private UserRepositoty userRepositoty;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostConstruct
     public void Init() {
@@ -74,6 +84,18 @@ public class DatabaseSeeder {
             .build());
         }
         transactionRepository.saveAll(transactions);
+
+        userRepositoty.saveAll(List.of(
+            User.builder()
+                .email("felipe@gmail.com")
+                .password(passwordEncoder.encode("12345"))
+                .role(UserRole.ADMIN)
+                .build(),
+                User.builder()
+                .email("sami@gmail.com")
+                .password(passwordEncoder.encode("12345"))
+                .role(UserRole.USER)
+                .build()));
     }
 
 }
