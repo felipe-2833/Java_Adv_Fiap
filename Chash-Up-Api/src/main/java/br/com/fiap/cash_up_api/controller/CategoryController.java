@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.fiap.cash_up_api.Repository.CategoryRepository;
 import br.com.fiap.cash_up_api.model.Category;
+import br.com.fiap.cash_up_api.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
@@ -41,9 +43,9 @@ public class CategoryController {
     // deprecated = false, hidden = true -> informa endpoint nao mais utilizado/
     // esconde o endpoint
     @Operation(description = "Listar todas as categorias", tags = "categories", summary = "Lista de categorias")
-    public List<Category> index() { // mocky
+    public List<Category> index(@AuthenticationPrincipal User user) {// mocky
         log.info("buscando todas categorias");
-        return repository.findAll();
+        return repository.findByUser(user);
     }
 
     // cadastrar categoria
@@ -58,9 +60,10 @@ public class CategoryController {
     // sempre retornar o recurso criado em metodos post
     // @ResponseStatus(code = HttpStatus.CREATED)
     // @requestbody verifica as mensagens passadas no body da requisisção
-    public Category create(@RequestBody @Valid Category category) {
+    public Category create(@RequestBody @Valid Category category, @AuthenticationPrincipal User user) {
         log.info("Cadastrando categoria: " + category.getName());
         // ResponseEntity da a possibilidade de configurar a resposta do metodo post
+        category.setUser(user);
         return repository.save(category);
     }
 
@@ -68,11 +71,12 @@ public class CategoryController {
     // GET :8080/categories/id -> json
     @GetMapping("/{id}")
     // Pathvariable indica que recebe informações do path (nome parametro = nome {})
-    public Category get(@PathVariable Long id) {
+    public Category get(@PathVariable Long id, @AuthenticationPrincipal User user) {
         // stream, ao ivez de um for, permite percorrer uma lista e pegar apenas o dado
         // nescessario, o filter vai indicar qual o filtro nescessario para isso;
         // findfirst retorna um Optional -> indicação se uma variavel tem valor ou não
         log.info("buscando categorias");
+        checkPermission(id, user);
         return getCategory(id); // nunca chamar um metodo get de um optional se você não ter certeza de que tem
                                 // alguma coisa dentro;
         // ok == status(200).body()
@@ -82,20 +86,27 @@ public class CategoryController {
     // escrever DelMap(ja acha aanotação)
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void destroy(@PathVariable Long id) {
+    public void destroy(@PathVariable Long id, @AuthenticationPrincipal User user) {
         log.info("apagando categoria" + id);
+        checkPermission(id, user);
         repository.delete(getCategory(id));
     }
 
     // editar uma categorias
     @PutMapping("/{id}")
-    public Category update(@PathVariable Long id, @RequestBody @Valid Category category) {
+    public Category update(@PathVariable Long id, @RequestBody @Valid Category category, @AuthenticationPrincipal User user) {
         log.info("alterando categoria: " + category.toString()); // Overide no toString(), permite que mudemos a
-                                                                 // resposta de categpria, que antes retornava um hash
-                                                                 // do objeto (escrevendo apenas category);
+        checkPermission(id, user);                                                         // resposta de categpria, que antes retornava um hash                                                       // do objeto (escrevendo apenas category);
         getCategory(id);
         category.setId(id);
+        category.setUser(user);
         return repository.save(category);
+    }
+
+    private void checkPermission(Long id, User user) {
+        var categoryOld = getCategory(id);
+        if(!categoryOld.getUser().equals(user)) 
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
 
     private Category getCategory(Long id) {

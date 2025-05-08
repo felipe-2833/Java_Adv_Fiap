@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 public record Credentials(
     @Email
     @NotBlank
-    String username,
+    String email,
 
     @NotBlank
-    String password 
+    String password
 ) {}

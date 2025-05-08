@@ -36,66 +36,68 @@ public class DatabaseSeeder {
     private PasswordEncoder passwordEncoder;
 
     @PostConstruct
-    public void Init() {
+    public void init() {
+        var joao = User.builder()
+                        .email("joao@fiap.com.br")
+                        .password(passwordEncoder.encode("12345"))
+                        .role(UserRole.ADMIN)
+                        .build();
+
+        var maria = User.builder()
+                        .email("maria@fiap.com.br")
+                        .password(passwordEncoder.encode("12345"))
+                        .role(UserRole.USER)
+                        .build();
+
+        userRepositoty.saveAll(List.of(joao, maria));
 
         var categories = List.of(
-                Category.builder().name("Educação").icon("Book").build(),
-                Category.builder().name("Lazer").icon("Dices").build(),
-                Category.builder().name("Saúde").icon("Heart").build(),
-                Category.builder().name("Alimentação").icon("Apple").build(),
-                Category.builder().name("Transporte").icon("Bus").build());
+                Category.builder().name("Educação").icon("Book").user(joao).build(),
+                Category.builder().name("Lazer").icon("Dices").user(joao).build(),
+                Category.builder().name("Saúde").icon("Heart").user(joao).build(),
+                Category.builder().name("Alimentação").icon("Apple").user(joao).build(),
+                Category.builder().name("Transporte").icon("Bus").user(joao).build(),
+                Category.builder().name("Transporte").icon("Bus").user(maria).build())
+                ;
 
         categoryRepository.saveAll(categories);
 
         var descriptions = List.of(
-            "Uber para casa",
-            "Conta de Luz",
-            "Faculdade",
-            "Aluguel",
-            "Supermercado",
-            "Farmácia",
-            "Combustível",
-            "Cinema com amigos",
-            "Assinatura Netflix",
-            "Internet",
-            "Conta de Água",
-            "Cartão de crédito",
-            "Manutenção do carro",
-            "Academia",
-            "Delivery de comida",
-            "Presente de aniversário",
-            "Consulta médica",
-            "Material escolar",
-            "Compras no shopping",
-            "Pet shop",
-            "Estacionamento"
-        );
+                "Uber para casa",
+                "Conta de Luz",
+                "Faculdade",
+                "Aluguel",
+                "Supermercado",
+                "Internet",
+                "Cinema com amigos",
+                "Compra na farmácia",
+                "Assinatura do Spotify",
+                "Assinatura da Netflix",
+                "Academia",
+                "Jantar com a família",
+                "Padaria",
+                "Manutenção do carro",
+                "Livros da faculdade",
+                "Café com colegas",
+                "Roupas novas",
+                "Presente de aniversário",
+                "Delivery de comida",
+                "Estacionamento no shopping");
 
         var transactions = new ArrayList<Transaction>();
-
-        for(int i = 0; i < 50; i++){
-            transactions.add(Transaction
-            .builder()
-            .description(descriptions.get(new Random().nextInt(descriptions.size())))
-            .amount(BigDecimal.valueOf(new Random().nextDouble() * 500))
-            .date(LocalDate.now().minusDays(new Random().nextInt(30)))
-            .type(TransactionType.EXPENSE)
-            .category(categories.get(new Random().nextInt(categories.size())))
-            .build());
+        for (int i = 0; i < 50; i++) {
+            transactions.add(Transaction.builder()
+                    .description(descriptions.get(new Random().nextInt(descriptions.size())))
+                    .amount(BigDecimal.valueOf(new Random().nextDouble() * 500))
+                    .date(LocalDate.now().minusDays(new Random().nextInt(30)))
+                    .type(new Random().nextBoolean() ? TransactionType.EXPENSE : TransactionType.INCOME)
+                    .category(categories.get(new Random().nextInt(categories.size())))
+                    .user(new Random().nextBoolean() ? joao : maria)
+                    .build());
         }
         transactionRepository.saveAll(transactions);
 
-        userRepositoty.saveAll(List.of(
-            User.builder()
-                .email("felipe@gmail.com")
-                .password(passwordEncoder.encode("12345"))
-                .role(UserRole.ADMIN)
-                .build(),
-                User.builder()
-                .email("sami@gmail.com")
-                .password(passwordEncoder.encode("12345"))
-                .role(UserRole.USER)
-                .build()));
+
     }
 
 }
