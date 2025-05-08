@@ -30,6 +30,17 @@ public interface  TransactionRepository extends  JpaRepository<Transaction, Long
         """)
     BigDecimal sumExpenseByUserinthismonth(User user);
 
+    @Query("""
+        SELECT COALESCE(t.amount, 0) FROM Transaction as t
+        WHERE t.type = 'EXPENSE'
+        AND Month(t.date) = Month(CURRENT_DATE)
+        AND Year(t.date) = Year(CURRENT_DATE)
+        AND t.user = :user
+        ORDER BY t.amount DESC
+        LIMIT 1
+        """)
+    BigDecimal topExpenseByUserthisMonth(User user);
+
     //List<Transaction> findByDescriptionContainingIgnoringCase(String description); // Query Methods
 
     //List<Transaction> findByDescriptionContainingIgnoringCaseAndDate(String description, LocalDate date);

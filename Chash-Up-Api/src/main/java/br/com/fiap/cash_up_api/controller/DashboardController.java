@@ -18,13 +18,14 @@ public class DashboardController {
     @Autowired
     private TransactionRepository repository;
 
-    record DashboardData(BigDecimal totalIncome, BigDecimal totalExpense ){}
+    record DashboardData(BigDecimal totalIncome, BigDecimal totalExpense, BigDecimal topExpense ){}
 
     @GetMapping
     public DashboardData getData(@AuthenticationPrincipal User user){
         BigDecimal totalIncome = repository.sumIncomeByUserInThisMonth(user);
         BigDecimal totalExpense = repository.sumExpenseByUserinthismonth(user);
-        return new DashboardData(totalIncome, totalExpense);
+        BigDecimal topExpense = repository.topExpenseByUserthisMonth(user);
+        return new DashboardData(totalIncome, totalExpense, topExpense);
     }
 
 }
