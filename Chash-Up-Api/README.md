@@ -51,3 +51,27 @@ log.info(template, var)
 - Para isso a clesse user precisa fazer um contrato com UserDetalils -> implementando seus metodos obrigatorios ("clausulas do contrato"), o getAuthorits e o getusername, que buscam uma lista de autorização do usuario e o username será no caso o email;
 
 * dica: implements == contrato
+
+# Aula 13/05
+
+-- Deploy: utilizaremos o Railway
+
+- acompanhar o projeto pela aba de observability
+
+- criar rede publica pelo settings do projet-deploy
+
+- criar variaveis de ambiente, nome configurado
+
+- valor de jwt-secret = passwordgenerator-Avast
+
+-- Configurar ambiente insomnia, base environment, share env
+
+- 1. developer: server - http://localhost:8080
+
+- 2. production: server - endereço railway
+
+-- Diversificação entre ambiente de desenvolvimento e produção. 
+
+- desenvolvimento: h2,profile
+
+- produção: oracle, profile
