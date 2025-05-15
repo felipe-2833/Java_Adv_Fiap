@@ -40,6 +40,7 @@ public class Transaction {
     private BigDecimal amount;
 
     @PastOrPresent(message = "data invalida, não pode ser no futuro")
+    @JsonIgnore
     private LocalDate date;
 
     @NotNull(message = "campo obrigatorio")

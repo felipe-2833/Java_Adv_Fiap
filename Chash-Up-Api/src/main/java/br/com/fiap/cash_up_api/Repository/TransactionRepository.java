@@ -1,6 +1,7 @@
 package br.com.fiap.cash_up_api.Repository;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import br.com.fiap.cash_up_api.model.Transaction;
+import br.com.fiap.cash_up_api.model.TransactionType;
 import br.com.fiap.cash_up_api.model.User;
 
 public interface  TransactionRepository extends  JpaRepository<Transaction, Long>, JpaSpecificationExecutor<Transaction>{
@@ -40,6 +42,8 @@ public interface  TransactionRepository extends  JpaRepository<Transaction, Long
         LIMIT 1
         """)
     BigDecimal topExpenseByUserthisMonth(User user);
+
+    List<Transaction> findByType(TransactionType expense);
 
     //List<Transaction> findByDescriptionContainingIgnoringCase(String description); // Query Methods
 
